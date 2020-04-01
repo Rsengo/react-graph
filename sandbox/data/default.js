@@ -1,147 +1,115 @@
 module.exports = {
     links: [
         {
-            source: "Androsynth",
-            target: "Chenjesu",
+            source: "cto",
+            target: "lead_1",
         },
         {
-            source: "Androsynth",
-            target: "Ilwrath",
+            source: "cto",
+            target: "lead_2",
         },
         {
-            source: "Androsynth",
-            target: "Mycon",
+            source: "lead_1",
+            target: "lead_1_emp_1",
         },
         {
-            source: "Androsynth",
-            target: "Spathi",
+            source: "lead_1",
+            target: "lead_1_emp_2",
         },
         {
-            source: "Androsynth",
-            target: "Umgah",
+            source: "lead_1",
+            target: "lead_1_emp_3",
         },
         {
-            source: "Androsynth",
-            target: "VUX",
+            source: "lead_1",
+            target: "lead_1_emp_4",
         },
         {
-            source: "Chenjesu",
-            target: "Mycon",
+            source: "lead_1",
+            target: "lead_1_emp_5",
         },
         {
-            source: "Chenjesu",
-            target: "Spathi",
+            source: "lead_2",
+            target: "lead_2_emp_1",
         },
         {
-            source: "Chenjesu",
-            target: "Umgah",
+            source: "lead_2",
+            target: "lead_2_emp_2",
         },
         {
-            source: "Chenjesu",
-            target: "VUX",
+            source: "lead_2",
+            target: "lead_2_emp_3",
         },
         {
-            source: "Ilwrath",
-            target: "Spathi",
+            source: "lead_2",
+            target: "lead_2_emp_4",
         },
         {
-            source: "Ilwrath",
-            target: "Umgah",
-        },
-        {
-            source: "Ilwrath",
-            target: "VUX",
-        },
-        {
-            source: "Mycon",
-            target: "Umgah",
-        },
-        {
-            source: "Mycon",
-            target: "VUX",
-        },
-        {
-            source: "Umgah",
-            target: "VUX",
-        },
-        {
-            source: "Androsynth",
-            target: "Guardian",
-        },
-        {
-            source: "Chenjesu",
-            target: "Broodhmome",
-        },
-        {
-            source: "Ilwrath",
-            target: "Avenger",
-        },
-        {
-            source: "Mycon",
-            target: "Podship",
-        },
-        {
-            source: "Spathi",
-            target: "Eluder",
-        },
-        {
-            source: "Umgah",
-            target: "Drone",
-        },
-        {
-            source: "VUX",
-            target: "Intruder",
+            source: "lead_2",
+            target: "lead_2_emp_5",
         },
     ],
     nodes: [
         {
-            id: "Androsynth",
+            id: "cto",
         },
         {
-            id: "Chenjesu",
+            id: "lead_1",
+            group: "group_1",
         },
         {
-            id: "Ilwrath",
+            id: "lead_2",
+            group: "group_2",
         },
         {
-            id: "Mycon",
+            id: "lead_1_emp_1",
+            group: "group_1",
         },
         {
-            id: "Spathi",
+            id: "lead_1_emp_2",
+            group: "group_1",
         },
         {
-            id: "Umgah",
+            id: "lead_1_emp_3",
+            group: "group_1",
         },
         {
-            id: "VUX",
+            id: "lead_1_emp_4",
+            group: "group_1",
         },
         {
-            id: "Guardian",
-            symbolType: "square",
+            id: "lead_1_emp_5",
+            group: "group_1",
         },
         {
-            id: "Broodhmome",
-            symbolType: "square",
+            id: "lead_2_emp_1",
+            group: "group_2",
         },
         {
-            id: "Avenger",
-            symbolType: "square",
+            id: "lead_2_emp_2",
+            group: "group_2",
         },
         {
-            id: "Podship",
-            symbolType: "square",
+            id: "lead_2_emp_3",
+            group: "group_2",
         },
         {
-            id: "Eluder",
-            symbolType: "square",
+            id: "lead_2_emp_4",
+            group: "group_2",
         },
         {
-            id: "Drone",
-            symbolType: "square",
+            id: "lead_2_emp_5",
+            group: "group_2",
+        },
+    ],
+    groups: [
+        {
+            id: "group_1",
+            fillColor: "red",
         },
         {
-            id: "Intruder",
-            symbolType: "square",
+            id: "group_2",
+            fillColor: "blue",
         },
     ],
 };

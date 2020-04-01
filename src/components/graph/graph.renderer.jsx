@@ -11,9 +11,10 @@ import { MARKERS, MARKER_SMALL_SIZE, MARKER_MEDIUM_OFFSET, MARKER_LARGE_OFFSET }
 import Link from "../link/Link";
 import Node from "../node/Node";
 import Marker from "../marker/Marker";
-import { buildLinkProps, buildNodeProps } from "./graph.builder";
+import { buildLinkProps, buildNodeProps, buildGroupProps } from "./graph.builder";
 import { getId } from "../graph/graph.helper";
 import { isNodeVisible } from "./collapse.helper";
+import Group from "../group/Group";
 
 /**
  * Build Link components given a list of links.
@@ -87,6 +88,31 @@ function _renderNodes(nodes, nodeCallbacks, config, highlightedNode, highlighted
         );
 
         return <Node key={nodeId} {...props} />;
+    });
+}
+
+function _renderGroups(nodes, groups, config) {
+    const nodeGroups = Object.values(nodes).reduce((aggregator, node) => {
+        if (!node.group) {
+            return aggregator;
+        }
+
+        const { group } = node;
+
+        if (!aggregator[group]) {
+            aggregator[group] = [node];
+        } else {
+            aggregator[group] = [...aggregator[group], node];
+        }
+
+        return aggregator;
+    }, {});
+
+    return groups.map(group => {
+        const groupNodes = nodeGroups[group.id];
+        const props = buildGroupProps(group, groupNodes, config);
+
+        return <Group key={groupId} {...props} />;
     });
 }
 
@@ -184,6 +210,7 @@ function renderGraph(
     links,
     linksMatrix,
     linkCallbacks,
+    groups,
     config,
     highlightedNode,
     highlightedLink,
@@ -201,6 +228,7 @@ function renderGraph(
             highlightedLink,
             transform
         ),
+        groups: _renderGroups(nodes, groups, config),
         defs: _memoizedRenderDefs(config),
     };
 }

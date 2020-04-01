@@ -156,8 +156,8 @@ function buildLinkProps(link, nodes, links, config, linkCallbacks, highlightedNo
 function buildNodeProps(node, config, nodeCallbacks = {}, highlightedNode, highlightedLink, transform) {
     const highlight =
         node.highlighted ||
-        (node.id === (highlightedLink && highlightedLink.source) ||
-            node.id === (highlightedLink && highlightedLink.target));
+        node.id === (highlightedLink && highlightedLink.source) ||
+            node.id === (highlightedLink && highlightedLink.target);
     const opacity = _getNodeOpacity(node, highlightedNode, highlightedLink, config);
 
     let fill = node.color || config.node.color;
@@ -223,4 +223,19 @@ function buildNodeProps(node, config, nodeCallbacks = {}, highlightedNode, highl
     };
 }
 
-export { buildLinkProps, buildNodeProps };
+function buildGroupProps(group, nodes, config) {
+    const { group: groupsConfig } = config;
+
+    const fillColor = group.fillColor || groupsConfig.fillColor;
+    const fillOpacity = group.fillOpacity || groupsConfig.fillOpacity;
+    const scale = group.scale || groupsConfig.scale;
+
+    return {
+        nodes,
+        fillColor,
+        fillOpacity,
+        scale,
+    };
+}
+
+export { buildLinkProps, buildNodeProps, buildGroupProps };

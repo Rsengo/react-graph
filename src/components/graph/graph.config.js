@@ -290,4 +290,9 @@ export default {
         markerWidth: 6,
         type: "STRAIGHT",
     },
+    group: {
+        fillOpacity: 0.05,
+        fillColor: "#d3d3d3",
+        scale: 1,
+    },
 };

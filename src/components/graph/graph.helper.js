@@ -222,6 +222,8 @@ function _validateGraphData(data) {
         data.links = [];
     }
 
+    //TODO валидация групп
+
     const n = data.links.length;
 
     for (let i = 0; i < n; i++) {
@@ -379,17 +381,20 @@ function initializeGraphState({ data, id, config }, state) {
             links: data.links.map((l, index) =>
                 _mergeDataLinkWithD3Link(l, index, state && state.d3Links, config, state)
             ),
+            groups: data.groups ? data.groups.map(g => ({ ...g })) : [], //TODO
         };
     } else {
         graph = {
             nodes: data.nodes.map(n => ({ ...n })),
             links: data.links.map(l => ({ ...l })),
+            groups: data.groups ? data.groups.map(g => ({ ...g })) : [], //TODO
         };
     }
 
     let newConfig = { ...merge(DEFAULT_CONFIG, config || {}) },
         links = _initializeLinks(graph.links, newConfig), // matrix of graph connections
         nodes = _tagOrphanNodes(_initializeNodes(graph.nodes), links);
+    const groups = graph.groups; //TODO
     const { nodes: d3Nodes, links: d3Links } = graph;
     const formatedId = id.replace(/ /g, "_");
     const simulation = _createForceSimulation(newConfig.width, newConfig.height, newConfig.d3 && newConfig.d3.gravity);
@@ -414,6 +419,7 @@ function initializeGraphState({ data, id, config }, state) {
         configUpdated: false,
         transform: 1,
         draggedNode: null,
+        groups,
     };
 }
 

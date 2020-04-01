@@ -583,7 +583,7 @@ export default class Graph extends React.Component {
     }
 
     render() {
-        const { nodes, links, defs } = renderGraph(
+        const { nodes, links, groups, defs } = renderGraph(
             this.state.nodes,
             {
                 onClickNode: this.onClickNode,
@@ -600,6 +600,7 @@ export default class Graph extends React.Component {
                 onMouseOverLink: this.onMouseOverLink,
                 onMouseOutLink: this.onMouseOutLink,
             },
+            this.state.groups,
             this.state.config,
             this.state.highlightedNode,
             this.state.highlightedLink,
@@ -618,6 +619,7 @@ export default class Graph extends React.Component {
                 <svg name={`svg-container-${this.state.id}`} style={svgStyle} onClick={this.onClickGraph}>
                     {defs}
                     <g id={`${this.state.id}-${CONST.GRAPH_CONTAINER_ID}`} {...containerProps}>
+                        {groups}
                         {links}
                         {nodes}
                     </g>
