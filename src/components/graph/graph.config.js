@@ -291,7 +291,7 @@ export default {
         type: "STRAIGHT",
     },
     group: {
-        fillOpacity: 0.05,
+        fillOpacity: 0.1,
         fillColor: "#d3d3d3",
         scale: 1,
     },

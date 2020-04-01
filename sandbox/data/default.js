@@ -105,11 +105,9 @@ module.exports = {
     groups: [
         {
             id: "group_1",
-            fillColor: "red",
         },
         {
             id: "group_2",
-            fillColor: "blue",
         },
     ],
 };

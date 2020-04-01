@@ -32,6 +32,7 @@ import ERRORS from "../../err";
 
 import { isDeepEqual, isEmptyObject, merge, pick, antiPick, throwErr, logWarning } from "../../utils";
 import { computeNodeDegree } from "./collapse.helper";
+import { generateRainbowColor } from "../../helpers/colors";
 
 const NODE_PROPS_WHITELIST = ["id", "highlighted", "x", "y", "index", "vy", "vx"];
 const LINK_PROPS_WHITELIST = ["index", "source", "target", "isHidden"];
@@ -199,6 +200,13 @@ function _tagOrphanNodes(nodes, linksMatrix) {
 
         return acc;
     }, {});
+}
+
+function _colorGroups(groups) {
+    return groups.map(group => ({
+        ...group,
+        fillColor: group.fillColor || generateRainbowColor(),
+    }));
 }
 
 /**
@@ -393,8 +401,8 @@ function initializeGraphState({ data, id, config }, state) {
 
     let newConfig = { ...merge(DEFAULT_CONFIG, config || {}) },
         links = _initializeLinks(graph.links, newConfig), // matrix of graph connections
-        nodes = _tagOrphanNodes(_initializeNodes(graph.nodes), links);
-    const groups = graph.groups; //TODO
+        nodes = _tagOrphanNodes(_initializeNodes(graph.nodes), links),
+        groups = _colorGroups(graph.groups);
     const { nodes: d3Nodes, links: d3Links } = graph;
     const formatedId = id.replace(/ /g, "_");
     const simulation = _createForceSimulation(newConfig.width, newConfig.height, newConfig.d3 && newConfig.d3.gravity);
