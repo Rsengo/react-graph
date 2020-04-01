@@ -156,6 +156,7 @@ export default class Sandbox extends React.Component {
             const data = {
                 nodes: [{ id: "Node 1" }],
                 links: [],
+                groups: [],
             };
 
             this.setState({ data });
@@ -171,7 +172,11 @@ export default class Sandbox extends React.Component {
 
             this.state.data.nodes.splice(0, 1);
             const links = this.state.data.links.filter(l => l.source !== id && l.target !== id);
-            const data = { nodes: this.state.data.nodes, links };
+            const data = {
+                nodes: this.state.data.nodes,
+                groups: this.state.data.groups,
+                links,
+            };
 
             this.setState({ data });
         } else {
@@ -281,6 +286,7 @@ export default class Sandbox extends React.Component {
         }
 
         const nodes = data.nodes.filter(Boolean);
+        const groups = data.groups.filter(Boolean);
         const isValidLink = link => link && link.source !== removedNodeId && link.target !== removedNodeId;
         const links = data.links.filter(isValidLink);
 
@@ -288,6 +294,7 @@ export default class Sandbox extends React.Component {
             data: {
                 links,
                 nodes,
+                groups,
             },
         });
     };
@@ -361,6 +368,7 @@ export default class Sandbox extends React.Component {
         const data = {
             nodes: this.decorateGraphNodesWithInitialPositioning(this.state.data.nodes),
             links: this.state.data.links,
+            groups: this.state.data.groups,
             focusedNodeId: this.state.data.focusedNodeId,
         };
 

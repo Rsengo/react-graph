@@ -10,7 +10,7 @@ const _createGroupPolygonLine = line()
 const createGroupPolygon = nodes => {
     var nodeCoords = nodes.map(d => [d.x, d.y]);
 
-    const polygon = polygonHull(node_coords);
+    const polygon = polygonHull(nodeCoords);
     const centroid = polygonCentroid(polygon);
 
     const unbiasedPolygonPoints = polygon.map(function(point) {

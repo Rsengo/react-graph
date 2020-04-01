@@ -112,7 +112,7 @@ function _renderGroups(nodes, groups, config) {
         const groupNodes = nodeGroups[group.id];
         const props = buildGroupProps(group, groupNodes, config);
 
-        return <Group key={groupId} {...props} />;
+        return <Group key={group.id} {...props} />;
     });
 }
 
