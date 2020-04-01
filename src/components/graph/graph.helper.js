@@ -379,23 +379,45 @@ function getId(sot) {
 function initializeGraphState({ data, id, config }, state) {
     _validateGraphData(data);
 
-    let graph;
+    let graph = {};
 
     if (state && state.nodes) {
         graph = {
+            ...graph,
             nodes: data.nodes.map(n =>
                 state.nodes[n.id] ? { ...n, ...pick(state.nodes[n.id], NODE_PROPS_WHITELIST) } : { ...n }
             ),
             links: data.links.map((l, index) =>
                 _mergeDataLinkWithD3Link(l, index, state && state.d3Links, config, state)
             ),
-            groups: data.groups ? data.groups.map(g => ({ ...g })) : [], //TODO
         };
     } else {
         graph = {
+            ...graph,
             nodes: data.nodes.map(n => ({ ...n })),
             links: data.links.map(l => ({ ...l })),
-            groups: data.groups ? data.groups.map(g => ({ ...g })) : [], //TODO
+        };
+    }
+
+    // TODO: refactor block
+    if (state && state.groups) {
+        graph = {
+            ...graph,
+            groups: data.groups
+                ? data.groups.map(g => {
+                      const stateGroup = state.groups.find(group => group.id === g.id);
+
+                      return {
+                          ...stateGroup,
+                          ...g,
+                      };
+                  })
+                : [],
+        };
+    } else {
+        graph = {
+            ...graph,
+            groups: data.groups ? data.groups.map(g => ({ ...g })) : [],
         };
     }
 
