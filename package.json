@@ -1,8 +1,8 @@
 {
   "name": "react-d3-graph",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "description": "React component to build interactive and configurable graphs with d3 effortlessly",
-  "author": "Daniel Caldas",
+  "author": "Rsengo",
   "license": "MIT",
   "scripts": {
     "check": "npm run docs:lint && npm run lint && npm run test && npm run functional",
@@ -93,7 +93,7 @@
   "main": "lib/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/danielcaldas/react-d3-graph.git"
+    "url": "git+https://github.com/Rsengo/react-d3-graph.git"
   },
   "keywords": [
     "d3-visualization",
