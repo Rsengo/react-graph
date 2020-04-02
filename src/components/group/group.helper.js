@@ -12,6 +12,16 @@ const createGroupPolygon = nodes => {
 
     var nodeCoords = nodes.map(d => [d.x, d.y]);
 
+    const flattenCoords = nodeCoords.flat();
+    const invalidNodes = flattenCoords.every(val => !val);
+
+    if (invalidNodes) {
+        return {
+            polygon: "",
+            centroid: [0, 0],
+        };
+    }
+
     const polygon = polygonHull(nodeCoords);
     const centroid = polygonCentroid(polygon);
 

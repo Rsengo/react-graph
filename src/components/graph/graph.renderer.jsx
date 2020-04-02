@@ -93,17 +93,19 @@ function _renderNodes(nodes, nodeCallbacks, config, highlightedNode, highlighted
 
 function _renderGroups(nodes, groups, config) {
     const nodeGroups = Object.values(nodes).reduce((aggregator, node) => {
-        if (!node.group) {
+        if (!node.groups || !node.groups.length) {
             return aggregator;
         }
 
-        const { group } = node;
+        const { groups } = node;
 
-        if (!aggregator[group]) {
-            aggregator[group] = [node];
-        } else {
-            aggregator[group] = [...aggregator[group], node];
-        }
+        groups.forEach(group => {
+            if (!aggregator[group]) {
+                aggregator[group] = [node];
+            } else {
+                aggregator[group] = [...aggregator[group], node];
+            }
+        });
 
         return aggregator;
     }, {});

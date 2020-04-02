@@ -29,6 +29,10 @@ module.exports = {
             target: "lead_1_emp_5",
         },
         {
+            source: "lead_1",
+            target: "common_emp_1",
+        },
+        {
             source: "lead_2",
             target: "lead_2_emp_1",
         },
@@ -48,6 +52,10 @@ module.exports = {
             source: "lead_2",
             target: "lead_2_emp_5",
         },
+        {
+            source: "lead_2",
+            target: "common_emp_1",
+        },
     ],
     nodes: [
         {
@@ -55,51 +63,55 @@ module.exports = {
         },
         {
             id: "lead_1",
-            group: "group_1",
+            groups: ["group_1"],
         },
         {
             id: "lead_2",
-            group: "group_2",
+            groups: ["group_2"],
         },
         {
             id: "lead_1_emp_1",
-            group: "group_1",
+            groups: ["group_1"],
         },
         {
             id: "lead_1_emp_2",
-            group: "group_1",
+            groups: ["group_1"],
         },
         {
             id: "lead_1_emp_3",
-            group: "group_1",
+            groups: ["group_1"],
         },
         {
             id: "lead_1_emp_4",
-            group: "group_1",
+            groups: ["group_1"],
         },
         {
             id: "lead_1_emp_5",
-            group: "group_1",
+            groups: ["group_1"],
         },
         {
             id: "lead_2_emp_1",
-            group: "group_2",
+            groups: ["group_2"],
         },
         {
             id: "lead_2_emp_2",
-            group: "group_2",
+            groups: ["group_2"],
         },
         {
             id: "lead_2_emp_3",
-            group: "group_2",
+            groups: ["group_2"],
         },
         {
             id: "lead_2_emp_4",
-            group: "group_2",
+            groups: ["group_2"],
         },
         {
             id: "lead_2_emp_5",
-            group: "group_2",
+            groups: ["group_2"],
+        },
+        {
+            id: "common_emp_1",
+            groups: ["group_1", "group_2"],
         },
     ],
     groups: [
