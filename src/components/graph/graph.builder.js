@@ -157,7 +157,7 @@ function buildNodeProps(node, config, nodeCallbacks = {}, highlightedNode, highl
     const highlight =
         node.highlighted ||
         node.id === (highlightedLink && highlightedLink.source) ||
-            node.id === (highlightedLink && highlightedLink.target);
+        node.id === (highlightedLink && highlightedLink.target);
     const opacity = _getNodeOpacity(node, highlightedNode, highlightedLink, config);
 
     let fill = node.color || config.node.color;
@@ -226,7 +226,7 @@ function buildNodeProps(node, config, nodeCallbacks = {}, highlightedNode, highl
 function buildGroupProps(group, nodes, config) {
     const { group: groupsConfig } = config;
 
-    const fillColor = group.fillColor || groupsConfig.fillColor;
+    const { fillColor } = group;
     const fillOpacity = group.fillOpacity || groupsConfig.fillOpacity;
     const scale = group.scale || groupsConfig.scale;
 

@@ -292,7 +292,6 @@ export default {
     },
     group: {
         fillOpacity: 0.1,
-        fillColor: "#d3d3d3",
         scale: 1,
     },
 };
