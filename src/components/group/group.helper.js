@@ -8,6 +8,8 @@ const _createGroupPolygonLine = line()
     .curve(curveCatmullRomClosed);
 
 const createGroupPolygon = nodes => {
+    // TODO: возвращать по-умолчанию если все координаты нод === 0
+
     var nodeCoords = nodes.map(d => [d.x, d.y]);
 
     const polygon = polygonHull(nodeCoords);
