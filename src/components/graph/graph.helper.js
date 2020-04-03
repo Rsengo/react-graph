@@ -53,10 +53,10 @@ function _createForceSimulation(width, height, gravity) {
     const fry = d3ForceY(height / 2).strength(CONST.FORCE_Y);
     const forceStrength = gravity;
 
-    return d3ForceSimulation()
-        .force("charge", d3ForceManyBody().strength(forceStrength))
-        .force("x", frx)
-        .force("y", fry);
+    //TODO
+    return d3ForceSimulation().force("charge", d3ForceManyBody().strength(forceStrength));
+    // .force("x", frx)
+    // .force("y", fry);
 }
 
 /**
