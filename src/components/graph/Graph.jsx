@@ -296,6 +296,10 @@ export default class Graph extends React.Component {
         d3SelectAll(`#${this.state.id}-${CONST.GRAPH_CONTAINER_ID}`).attr("transform", transform);
 
         this.state.config.panAndZoom && this.setState({ transform: transform.k });
+
+        if (this.props.onZoom) {
+            this.props.onZoom(transform.k);
+        }
     };
 
     /**
