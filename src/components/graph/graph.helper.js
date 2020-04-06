@@ -32,7 +32,8 @@ import ERRORS from "../../err";
 
 import { isDeepEqual, isEmptyObject, merge, pick, antiPick, throwErr, logWarning } from "../../utils";
 import { computeNodeDegree } from "./collapse.helper";
-import { generateRainbowColor } from "../../helpers/colors";
+import { generateRainbowColor } from "../../helpers/colorHelper";
+import { getId } from "../link/link.helper";
 
 const NODE_PROPS_WHITELIST = ["id", "highlighted", "x", "y", "index", "vy", "vx"];
 const LINK_PROPS_WHITELIST = ["index", "source", "target", "isHidden"];
@@ -348,25 +349,6 @@ function getCenterAndZoomTransformation(d3Node, config) {
 }
 
 /**
- * This function extracts an id from a link.
- * **Why this function?**
- * According to [d3-force](https://github.com/d3/d3-force#link_links)
- * d3 links might be initialized with "source" and "target"
- * properties as numbers or strings, but after initialization they
- * are converted to an object. This small utility functions ensures
- * that weather in initialization or further into the lifetime of the graph
- * we always get the id.
- * @param {Object|string|number} sot source or target
- * of the link to extract id.
- * we want to extract an id.
- * @returns {string|number} the id of the link.
- * @memberof Graph/helper
- */
-function getId(sot) {
-    return sot.id !== undefined && sot.id !== null ? sot.id : sot;
-}
-
-/**
  * Encapsulates common procedures to initialize graph.
  * @param {Object} props - Graph component props, object that holds data, id and config.
  * @param {Object} props.data - Data object holds links (array of **Link**) and nodes (array of **Node**).
@@ -491,7 +473,6 @@ export {
     checkForGraphConfigChanges,
     checkForGraphElementsChanges,
     getCenterAndZoomTransformation,
-    getId,
     initializeGraphState,
     updateNodeHighlightedValue,
 };

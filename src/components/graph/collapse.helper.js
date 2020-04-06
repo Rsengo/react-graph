@@ -5,7 +5,7 @@
  * create the collapsible behavior. These functions will most likely operate on
  * the links matrix.
  */
-import { getId } from "./graph.helper";
+import { getId } from "../link/link.helper";
 import { logError } from "../../utils";
 
 /**

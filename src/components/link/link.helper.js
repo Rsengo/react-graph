@@ -77,4 +77,23 @@ function buildLinkPathDefinition({ source = {}, target = {} }, type = LINE_TYPES
     return `M${sx},${sy}A${radius},${radius} 0 0,1 ${tx},${ty}`;
 }
 
-export { buildLinkPathDefinition };
+/**
+ * This function extracts an id from a link.
+ * **Why this function?**
+ * According to [d3-force](https://github.com/d3/d3-force#link_links)
+ * d3 links might be initialized with "source" and "target"
+ * properties as numbers or strings, but after initialization they
+ * are converted to an object. This small utility functions ensures
+ * that weather in initialization or further into the lifetime of the graph
+ * we always get the id.
+ * @param {Object|string|number} sot source or target
+ * of the link to extract id.
+ * we want to extract an id.
+ * @returns {string|number} the id of the link.
+ * @memberof Graph/helper
+ */
+function getId(sot) {
+    return sot.id !== undefined && sot.id !== null ? sot.id : sot;
+}
+
+export { buildLinkPathDefinition, getId };
