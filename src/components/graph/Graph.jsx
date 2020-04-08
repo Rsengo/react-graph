@@ -616,7 +616,6 @@ export default class Graph extends React.Component {
                 onMouseOverNode: this.onMouseOverNode,
                 onMouseOut: this.onMouseOutNode,
             },
-            this.state.collapsedNodes,
             this.state.d3Links,
             this.state.links,
             {
@@ -625,7 +624,6 @@ export default class Graph extends React.Component {
                 onMouseOverLink: this.onMouseOverLink,
                 onMouseOutLink: this.onMouseOutLink,
             },
-            this.state.collapsedLinks,
             this.state.groups,
             this.state.config,
             this.state.highlightedNode,

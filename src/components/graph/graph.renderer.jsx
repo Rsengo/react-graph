@@ -109,11 +109,9 @@ const _memoizedRenderDefs = _renderDefs();
 function renderGraph(
     nodes,
     nodeCallbacks,
-    collapsedNodes,
     links,
     linksMatrix,
     linkCallbacks,
-    collapsedLinks,
     groups,
     config,
     highlightedNode,
@@ -121,6 +119,15 @@ function renderGraph(
     transform,
     groupsCollapsed
 ) {
+    let collapsedNodes = null;
+    let collapsedLinks = null;
+
+    if (groupsCollapsed) {
+        const collapsedData = getCollapsedData(nodes, links, groups);
+        collapsedNodes = collapsedData.nodes;
+        collapsedLinks = collapsedData.links;
+    }
+
     const usedNodes = groupsCollapsed ? collapsedNodes : nodes;
     const usedLinks = groupsCollapsed ? collapsedLinks : links;
     const usedGroups = groupsCollapsed ? null : renderGroups(nodes, groups, config);
