@@ -234,4 +234,4 @@ function logWarning(component, msg) {
     console.warn(warning);
 }
 
-export { isDeepEqual, isEmptyObject, deepClone, merge, pick, antiPick, throwErr, logError, logWarning };
+export { isDeepEqual, isEmptyObject, deepClone, merge, pick, antiPick, uniqBy, throwErr, logError, logWarning };
