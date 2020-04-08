@@ -1,4 +1,4 @@
-import uniqBy from "lodash.uniqby";
+import uniqBy from "../../utils";
 
 /**
  * @module Graph/renderer

@@ -1,6 +1,6 @@
 {
   "name": "d3-graph-qbt",
-  "version": "2.5.4",
+  "version": "2.5.5",
   "description": "React component to build interactive and configurable graphs with d3 effortlessly",
   "author": "Rsengo",
   "license": "MIT",
@@ -37,8 +37,7 @@
   },
   "peerDependencies": {
     "d3": "^5.5.0",
-    "react": "^16.4.1",
-    "lodash.uniqby": "^4.7.0"
+    "react": "^16.4.1"
   },
   "devDependencies": {
     "@babel/cli": "7.6.0",

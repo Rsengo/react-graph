@@ -172,6 +172,22 @@ function antiPick(o, props = []) {
     return pick(o, wanted);
 }
 
+function uniqBy(arr, predicate) {
+    const getter = typeof predicate === "function" ? predicate : o => o[predicate];
+
+    return [
+        ...arr
+            .reduce((map, item) => {
+                const key = item === null || item === undefined ? item : getter(item);
+
+                map.has(key) || map.set(key, item);
+
+                return map;
+            }, new Map())
+            .values(),
+    ];
+}
+
 /**
  * Formats an error message with fallbacks for the given parameters.
  * @param {string} component component name.
