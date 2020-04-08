@@ -293,7 +293,7 @@ export default {
     group: {
         fillOpacity: 0.1,
         scale: 1,
-        collapseZoom: 0.5,
-        collapsible: false,
+        collapseZoom: 1,
+        collapsible: true,
     },
 };

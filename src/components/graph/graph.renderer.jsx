@@ -1,4 +1,4 @@
-import uniqBy from "../../utils";
+import { uniqBy } from "../../utils";
 
 /**
  * @module Graph/renderer
