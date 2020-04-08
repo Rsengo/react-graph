@@ -34,6 +34,7 @@ import { isDeepEqual, isEmptyObject, merge, pick, antiPick, throwErr, logWarning
 import { computeNodeDegree } from "./collapse.helper";
 import { generateRainbowColor } from "../../helpers/colorHelper";
 import { getId } from "../link/link.helper";
+import { getCollapsedData } from "../group/collapse.hepler";
 
 const NODE_PROPS_WHITELIST = ["id", "highlighted", "x", "y", "index", "vy", "vx"];
 const LINK_PROPS_WHITELIST = ["index", "source", "target", "isHidden"];
@@ -418,6 +419,8 @@ function initializeGraphState({ data, id, config }, state) {
         newConfig.focusZoom = minZoom;
     }
 
+    const { nodes: collapsedNodes, links: collapsedLinks } = getCollapsedData(nodes, d3Links, groups);
+
     return {
         id: formatedId,
         config: newConfig,
@@ -433,6 +436,8 @@ function initializeGraphState({ data, id, config }, state) {
         draggedNode: null,
         groups,
         groupsCollapsed: false,
+        collapsedNodes,
+        collapsedLinks,
     };
 }
 
@@ -447,15 +452,27 @@ function initializeGraphState({ data, id, config }, state) {
  * and the id of the highlighted node.
  * @memberof Graph/helper
  */
-function updateNodeHighlightedValue(nodes, links, config, id, value = false) {
-    const highlightedNode = value ? id : "";
-    const node = { ...nodes[id], highlighted: value };
+function updateNodeHighlightedValue(
+    nodes,
+    collapsedNodes,
+    links,
+    collapsedLinks,
+    groupsCollapsed,
+    config,
+    id,
+    value = false
+) {
+    const usedNodes = groupsCollapsed ? collapsedNodes : nodes;
+    const usedLinks = groupsCollapsed ? collapsedLinks : links;
 
-    let updatedNodes = { ...nodes, [id]: node };
+    const highlightedNode = value ? id : "";
+    const node = { ...usedNodes[id], highlighted: value };
+
+    let updatedNodes = { ...usedNodes, [id]: node };
 
     // when highlightDegree is 0 we want only to highlight selected node
-    if (links[id] && config.highlightDegree !== 0) {
-        updatedNodes = Object.keys(links[id]).reduce((acc, linkId) => {
+    if (usedLinks[id] && config.highlightDegree !== 0) {
+        updatedNodes = Object.keys(usedLinks[id]).reduce((acc, linkId) => {
             const updatedNode = { ...updatedNodes[linkId], highlighted: value };
 
             acc[linkId] = updatedNode;

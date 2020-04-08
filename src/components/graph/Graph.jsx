@@ -256,9 +256,20 @@ export default class Graph extends React.Component {
      * @param  {boolean} [value=false] - the highlight value to be set (true or false).
      * @returns {undefined}
      */
-    _setNodeHighlightedValue = (id, value = false) =>
-        this._tick(updateNodeHighlightedValue(this.state.nodes, this.state.links, this.state.config, id, value));
-
+    _setNodeHighlightedValue = (id, value = false) => {
+        this._tick(
+            updateNodeHighlightedValue(
+                this.state.nodes,
+                this.state.collapsedNodes,
+                this.state.links,
+                this.state.collapsedLinks,
+                this.state.groupsCollapsed,
+                this.state.config,
+                id,
+                value
+            )
+        );
+    };
     /**
      * The tick function simply calls React set state in order to update component and render nodes
      * along time as d3 calculates new node positioning.
@@ -605,6 +616,7 @@ export default class Graph extends React.Component {
                 onMouseOverNode: this.onMouseOverNode,
                 onMouseOut: this.onMouseOutNode,
             },
+            this.state.collapsedNodes,
             this.state.d3Links,
             this.state.links,
             {
@@ -613,6 +625,7 @@ export default class Graph extends React.Component {
                 onMouseOverLink: this.onMouseOverLink,
                 onMouseOutLink: this.onMouseOutLink,
             },
+            this.state.collapsedLinks,
             this.state.groups,
             this.state.config,
             this.state.highlightedNode,
@@ -633,7 +646,7 @@ export default class Graph extends React.Component {
                 <svg name={`svg-container-${this.state.id}`} style={svgStyle} onClick={this.onClickGraph}>
                     {defs}
                     <g id={`${this.state.id}-${CONST.GRAPH_CONTAINER_ID}`} {...containerProps}>
-                        {groups}
+                        {this.state.groupsCollapsed ? null : groups}
                         {links}
                         {nodes}
                     </g>

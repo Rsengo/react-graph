@@ -109,9 +109,11 @@ const _memoizedRenderDefs = _renderDefs();
 function renderGraph(
     nodes,
     nodeCallbacks,
+    collapsedNodes,
     links,
     linksMatrix,
     linkCallbacks,
+    collapsedLinks,
     groups,
     config,
     highlightedNode,
@@ -119,39 +121,15 @@ function renderGraph(
     transform,
     groupsCollapsed
 ) {
-    if (!groupsCollapsed) {
-        return {
-            nodes: renderNodes(nodes, nodeCallbacks, config, highlightedNode, highlightedLink, transform, linksMatrix),
-            links: renderLinks(
-                nodes,
-                links,
-                linksMatrix,
-                config,
-                linkCallbacks,
-                highlightedNode,
-                highlightedLink,
-                transform
-            ),
-            groups: renderGroups(nodes, groups, config),
-            defs: _memoizedRenderDefs(config),
-        };
-    }
-
-    const { nodes: collapsedNodes, links: collapsedLinks } = getCollapsedData(nodes, links, groups);
+    const usedNodes = groupsCollapsed ? collapsedNodes : nodes;
+    const usedLinks = groupsCollapsed ? collapsedLinks : links;
+    const usedGroups = groupsCollapsed ? null : renderGroups(nodes, groups, config);
 
     return {
-        nodes: renderNodes(
-            collapsedNodes,
-            nodeCallbacks,
-            config,
-            highlightedNode,
-            highlightedLink,
-            transform,
-            linksMatrix
-        ),
+        nodes: renderNodes(usedNodes, nodeCallbacks, config, highlightedNode, highlightedLink, transform, linksMatrix),
         links: renderLinks(
-            collapsedNodes,
-            collapsedLinks,
+            usedNodes,
+            usedLinks,
             linksMatrix,
             config,
             linkCallbacks,
@@ -159,7 +137,7 @@ function renderGraph(
             highlightedLink,
             transform
         ),
-        groups: [],
+        groups: usedGroups,
         defs: _memoizedRenderDefs(config),
     };
 }

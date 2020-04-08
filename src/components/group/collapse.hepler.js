@@ -1,5 +1,6 @@
 import { getGroupNodes, createGroupPolygon } from "./group.helper";
 import { uniqBy } from "../../utils";
+import { getId } from "../link/link.helper";
 
 const getCollapsedData = (nodes, links, groups) => {
     const nodesWithoutGroups = Object.values(nodes).filter(
@@ -21,14 +22,14 @@ const getCollapsedData = (nodes, links, groups) => {
         };
     });
 
-    const collapsedLinks = Object.values(links).map(link => {
+    const collapsedLinks = links.map(link => {
         const { target, source } = link;
 
-        const { id: sourceId } = source;
+        const sourceId = getId(source);
         const sourceNode = nodesWithGroups.find(({ id }) => id === sourceId);
         const sourceGroups = sourceNode?.groups || [sourceId];
 
-        const { id: targetId } = target;
+        const targetId = getId(target);
         const targetNode = nodesWithGroups.find(({ id }) => id === targetId);
         const targetGroups = targetNode?.groups || [targetId];
 
