@@ -1,3 +1,5 @@
+import uniqBy from "lodash.uniqby";
+
 /**
  * @module Graph/renderer
  * @description
@@ -13,6 +15,7 @@ import Marker from "../marker/Marker";
 import { renderLinks } from "../link/link.renderer";
 import { renderNodes } from "../node/node.renderer";
 import { renderGroups } from "../group/group.renderer";
+import { getGroupNodes, createGroupPolygon } from "../group/group.helper";
 
 /**
  * Builds graph defs (for now markers, but we could also have gradients for instance).
@@ -112,13 +115,90 @@ function renderGraph(
     config,
     highlightedNode,
     highlightedLink,
-    transform
+    transform,
+    groupsCollapsed
 ) {
+    if (!groupsCollapsed) {
+        return {
+            nodes: renderNodes(nodes, nodeCallbacks, config, highlightedNode, highlightedLink, transform, linksMatrix),
+            links: renderLinks(
+                nodes,
+                links,
+                linksMatrix,
+                config,
+                linkCallbacks,
+                highlightedNode,
+                highlightedLink,
+                transform
+            ),
+            groups: renderGroups(nodes, groups, config),
+            defs: _memoizedRenderDefs(config),
+        };
+    }
+
+    const nodesWithoutGroups = Object.values(nodes).filter(({ groups }) => !groups || !groups.length);
+    const nodesWithGroups = Object.values(nodes).filter(({ groups }) => groups && groups.length);
+
+    const groupNodes = getGroupNodes(nodesWithGroups);
+
+    const collapsedNodes = Object.values(groups).map(({ id, fillColor }) => {
+        const currentGroupNodes = groupNodes[id];
+        const { centroid } = createGroupPolygon(currentGroupNodes);
+
+        return {
+            id,
+            color: fillColor,
+            x: centroid[0],
+            y: centroid[1],
+        };
+    });
+
+    const collapsedLinks = Object.values(links).map(link => {
+        const { target, source } = link;
+
+        const { id: sourceId } = source;
+        const sourceNode = nodesWithGroups.find(({ id }) => id === sourceId);
+        const sourceGroups = sourceNode?.groups || [sourceId];
+
+        const { id: targetId } = target;
+        const targetNode = nodesWithGroups.find(({ id }) => id === targetId);
+        const targetGroups = targetNode?.groups || [targetId];
+
+        const linksArray = [];
+
+        sourceGroups.forEach(sourceGroup => {
+            targetGroups.forEach(targetGroup => {
+                linksArray.push({
+                    ...link,
+                    target: targetGroup,
+                    source: sourceGroup,
+                });
+            });
+        });
+
+        return linksArray;
+    });
+
+    const collapsedLinksFlat = collapsedLinks.flat();
+    const flattenCollapsedLinks = uniqBy(collapsedLinksFlat, ({ target, source }) => target + source);
+
+    const resultNodes = [...nodesWithoutGroups, ...collapsedNodes].reduce((agg, curNode) => {
+        return { ...agg, [curNode.id]: curNode };
+    }, {});
+
     return {
-        nodes: renderNodes(nodes, nodeCallbacks, config, highlightedNode, highlightedLink, transform, linksMatrix),
+        nodes: renderNodes(
+            resultNodes,
+            nodeCallbacks,
+            config,
+            highlightedNode,
+            highlightedLink,
+            transform,
+            linksMatrix
+        ),
         links: renderLinks(
-            nodes,
-            links,
+            resultNodes,
+            flattenCollapsedLinks,
             linksMatrix,
             config,
             linkCallbacks,
@@ -126,7 +206,7 @@ function renderGraph(
             highlightedLink,
             transform
         ),
-        groups: renderGroups(nodes, groups, config),
+        groups: [],
         defs: _memoizedRenderDefs(config),
     };
 }

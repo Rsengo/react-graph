@@ -37,4 +37,24 @@ const createGroupPolygon = nodes => {
     };
 };
 
-export { createGroupPolygon };
+const getGroupNodes = nodes => {
+    return Object.values(nodes).reduce((aggregator, node) => {
+        if (!node.groups || !node.groups.length) {
+            return aggregator;
+        }
+
+        const { groups } = node;
+
+        groups.forEach(group => {
+            if (!aggregator[group]) {
+                aggregator[group] = [node];
+            } else {
+                aggregator[group] = [...aggregator[group], node];
+            }
+        });
+
+        return aggregator;
+    }, {});
+};
+
+export { createGroupPolygon, getGroupNodes };

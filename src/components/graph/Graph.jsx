@@ -297,6 +297,12 @@ export default class Graph extends React.Component {
 
         this.state.config.panAndZoom && this.setState({ transform: transform.k });
 
+        if (transform.k > 0.5) {
+            this.setState({ ...this.state, groupsCollapsed: false });
+        } else {
+            this.setState({ ...this.state, groupsCollapsed: true });
+        }
+
         if (this.props.onZoom) {
             this.props.onZoom(transform.k);
         }
@@ -495,6 +501,9 @@ export default class Graph extends React.Component {
         this.nodeClickTimer = null;
         this.isDraggingNode = false;
         this.state = initializeGraphState(this.props, this.state);
+
+        window.ssp = () => this.setState({ ...this.state, groupsCollapsed: true });
+        window.ssn = () => this.setState({ ...this.state, groupsCollapsed: false });
     }
 
     /**
@@ -608,7 +617,8 @@ export default class Graph extends React.Component {
             this.state.config,
             this.state.highlightedNode,
             this.state.highlightedLink,
-            this.state.transform
+            this.state.transform,
+            this.state.groupsCollapsed
         );
 
         const svgStyle = {

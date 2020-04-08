@@ -28,10 +28,10 @@ module.exports = {
             source: "lead_1",
             target: "lead_1_emp_5",
         },
-        {
-            source: "lead_1",
-            target: "common_emp_1",
-        },
+        // {
+        //     source: "lead_1",
+        //     target: "common_emp_1",
+        // },
         {
             source: "lead_2",
             target: "lead_2_emp_1",
@@ -52,10 +52,10 @@ module.exports = {
             source: "lead_2",
             target: "lead_2_emp_5",
         },
-        {
-            source: "lead_2",
-            target: "common_emp_1",
-        },
+        // {
+        //     source: "lead_2",
+        //     target: "common_emp_1",
+        // },
     ],
     nodes: [
         {
@@ -109,10 +109,10 @@ module.exports = {
             id: "lead_2_emp_5",
             groups: ["group_2"],
         },
-        {
-            id: "common_emp_1",
-            groups: ["group_1", "group_2"],
-        },
+        // {
+        //     id: "common_emp_1",
+        //     groups: ["group_1", "group_2"],
+        // },
     ],
     groups: [
         {
