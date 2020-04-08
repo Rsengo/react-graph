@@ -294,5 +294,6 @@ export default {
         fillOpacity: 0.1,
         scale: 1,
         collapseZoom: 0.5,
+        collapsible: false,
     },
 };
