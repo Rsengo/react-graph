@@ -16,6 +16,7 @@ import { renderLinks } from "../link/link.renderer";
 import { renderNodes } from "../node/node.renderer";
 import { renderGroups } from "../group/group.renderer";
 import { getGroupNodes, createGroupPolygon } from "../group/group.helper";
+import { getCollapsedData } from "../group/collapse.hepler";
 
 /**
  * Builds graph defs (for now markers, but we could also have gradients for instance).
@@ -136,59 +137,11 @@ function renderGraph(
         };
     }
 
-    const nodesWithoutGroups = Object.values(nodes).filter(({ groups }) => !groups || !groups.length);
-    const nodesWithGroups = Object.values(nodes).filter(({ groups }) => groups && groups.length);
-
-    const groupNodes = getGroupNodes(nodesWithGroups);
-
-    const collapsedNodes = Object.values(groups).map(({ id, fillColor }) => {
-        const currentGroupNodes = groupNodes[id];
-        const { centroid } = createGroupPolygon(currentGroupNodes);
-
-        return {
-            id,
-            color: fillColor,
-            x: centroid[0],
-            y: centroid[1],
-        };
-    });
-
-    const collapsedLinks = Object.values(links).map(link => {
-        const { target, source } = link;
-
-        const { id: sourceId } = source;
-        const sourceNode = nodesWithGroups.find(({ id }) => id === sourceId);
-        const sourceGroups = sourceNode?.groups || [sourceId];
-
-        const { id: targetId } = target;
-        const targetNode = nodesWithGroups.find(({ id }) => id === targetId);
-        const targetGroups = targetNode?.groups || [targetId];
-
-        const linksArray = [];
-
-        sourceGroups.forEach(sourceGroup => {
-            targetGroups.forEach(targetGroup => {
-                linksArray.push({
-                    ...link,
-                    target: targetGroup,
-                    source: sourceGroup,
-                });
-            });
-        });
-
-        return linksArray;
-    });
-
-    const collapsedLinksFlat = collapsedLinks.flat();
-    const flattenCollapsedLinks = uniqBy(collapsedLinksFlat, ({ target, source }) => target + source);
-
-    const resultNodes = [...nodesWithoutGroups, ...collapsedNodes].reduce((agg, curNode) => {
-        return { ...agg, [curNode.id]: curNode };
-    }, {});
+    const { nodes: collapsedNodes, links: collapsedLinks } = getCollapsedData(nodes, links, groups);
 
     return {
         nodes: renderNodes(
-            resultNodes,
+            collapsedNodes,
             nodeCallbacks,
             config,
             highlightedNode,
@@ -197,8 +150,8 @@ function renderGraph(
             linksMatrix
         ),
         links: renderLinks(
-            resultNodes,
-            flattenCollapsedLinks,
+            collapsedNodes,
+            collapsedLinks,
             linksMatrix,
             config,
             linkCallbacks,

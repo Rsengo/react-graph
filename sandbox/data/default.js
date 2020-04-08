@@ -109,10 +109,10 @@ module.exports = {
             id: "lead_2_emp_5",
             groups: ["group_2"],
         },
-        // {
-        //     id: "common_emp_1",
-        //     groups: ["group_1", "group_2"],
-        // },
+        {
+            id: "common_emp_1",
+            groups: ["group_1", "group_2"],
+        },
     ],
     groups: [
         {
