@@ -297,7 +297,7 @@ export default class Graph extends React.Component {
 
         this.state.config.panAndZoom && this.setState({ transform: transform.k });
 
-        if (transform.k > 0.5) {
+        if (transform.k > this.state.config.group.collapseZoom) {
             this.setState({ ...this.state, groupsCollapsed: false });
         } else {
             this.setState({ ...this.state, groupsCollapsed: true });
