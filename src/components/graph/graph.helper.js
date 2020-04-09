@@ -482,7 +482,8 @@ function updateNodeHighlightedValue(
     }
 
     return {
-        nodes: updatedNodes,
+        nodes: groupsCollapsed ? nodes : updatedNodes,
+        collapsedNodes: groupsCollapsed ? updatedNodes : collapsedNodes,
         highlightedNode,
     };
 }
