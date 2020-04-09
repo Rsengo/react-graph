@@ -229,26 +229,6 @@ function _validateGraphData(data) {
 }
 
 /**
- * Picks the id.
- * @param {Object} o object to pick from.
- * @returns {Object} new object with id property only.
- * @memberof Graph/helper
- */
-function _pickId(o) {
-    return pick(o, ["id"]);
-}
-
-/**
- * Picks source and target.
- * @param {Object} o object to pick from.
- * @returns {Object} new object with source and target only.
- * @memberof Graph/helper
- */
-function _pickSourceAndTarget(o) {
-    return pick(o, ["source", "target"]);
-}
-
-/**
  * Returns the transformation to apply in order to center the graph on the
  * selected node.
  * @param {Object} d3Node - node to focus the graph view on.

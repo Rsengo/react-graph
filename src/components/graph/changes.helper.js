@@ -1,7 +1,28 @@
 import { isDeepEqual, isEmptyObject, merge, pick, antiPick, throwErr, logWarning } from "../../utils";
+import { getId } from "../link/link.helper";
 
 // list of properties that are of no interest when it comes to nodes and links comparison
 const NODE_PROPERTIES_DISCARD_TO_COMPARE = ["x", "y", "vx", "vy", "index"];
+
+/**
+ * Picks the id.
+ * @param {Object} o object to pick from.
+ * @returns {Object} new object with id property only.
+ * @memberof Graph/helper
+ */
+function _pickId(o) {
+    return pick(o, ["id"]);
+}
+
+/**
+ * Picks source and target.
+ * @param {Object} o object to pick from.
+ * @returns {Object} new object with source and target only.
+ * @memberof Graph/helper
+ */
+function _pickSourceAndTarget(o) {
+    return pick(o, ["source", "target"]);
+}
 
 /**
  * Logic to check for changes in graph config.
