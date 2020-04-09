@@ -19,13 +19,6 @@
  * @property {string} [svg=] - custom svg for node (optional).
  * @memberof Graph/helper
  */
-import {
-    forceX as d3ForceX,
-    forceY as d3ForceY,
-    forceSimulation as d3ForceSimulation,
-    forceManyBody as d3ForceManyBody,
-} from "d3-force";
-
 import CONST from "./graph.const";
 import DEFAULT_CONFIG from "./graph.config";
 import ERRORS from "../../err";
@@ -35,31 +28,10 @@ import { computeNodeDegree } from "./collapse.helper";
 import { generateRainbowColor } from "../../helpers/colorHelper";
 import { getId } from "../link/link.helper";
 import { getCollapsedData } from "../group/collapse.hepler";
+import { createForceSimulation } from "../../helpers/simulationHelper";
 
 const NODE_PROPS_WHITELIST = ["id", "highlighted", "x", "y", "index", "vy", "vx"];
 const LINK_PROPS_WHITELIST = ["index", "source", "target", "isHidden"];
-
-/**
- * Create d3 forceSimulation to be applied on the graph.<br/>
- * {@link https://github.com/d3/d3-force#forceSimulation|d3-force#forceSimulation}<br/>
- * {@link https://github.com/d3/d3-force#simulation_force|d3-force#simulation_force}<br/>
- * Wtf is a force? {@link https://github.com/d3/d3-force#forces| here}
- * @param  {number} width - the width of the container area of the graph.
- * @param  {number} height - the height of the container area of the graph.
- * @param  {number} gravity - the force strength applied to the graph.
- * @returns {Object} returns the simulation instance to be consumed.
- * @memberof Graph/helper
- */
-function _createForceSimulation(width, height, gravity) {
-    const frx = d3ForceX(width / 2).strength(CONST.FORCE_X);
-    const fry = d3ForceY(height / 2).strength(CONST.FORCE_Y);
-    const forceStrength = gravity;
-
-    //TODO
-    return d3ForceSimulation().force("charge", d3ForceManyBody().strength(forceStrength));
-    // .force("x", frx)
-    // .force("y", fry);
-}
 
 /**
  * Receives a matrix of the graph with the links source and target as concrete node instances and it transforms it
@@ -280,54 +252,6 @@ function _pickSourceAndTarget(o) {
 }
 
 /**
- * This function checks for graph elements (nodes and links) changes, in two different
- * levels of significance, updated elements (whether some property has changed in some
- * node or link) and new elements (whether some new elements or added/removed from the graph).
- * @param {Object} nextProps - nextProps that graph will receive.
- * @param {Object} currentState - the current state of the graph.
- * @returns {Object.<string, boolean>} returns object containing update check flags:
- * - newGraphElements - flag that indicates whether new graph elements were added.
- * - graphElementsUpdated - flag that indicates whether some graph elements have
- * updated (some property that is not in NODE_PROPERTIES_DISCARD_TO_COMPARE was added to
- * some node or link or was updated).
- * @memberof Graph/helper
- */
-function checkForGraphElementsChanges(nextProps, currentState) {
-    const nextNodes = nextProps.data.nodes.map(n => antiPick(n, NODE_PROPERTIES_DISCARD_TO_COMPARE));
-    const nextLinks = nextProps.data.links;
-    const stateD3Nodes = currentState.d3Nodes.map(n => antiPick(n, NODE_PROPERTIES_DISCARD_TO_COMPARE));
-    const stateD3Links = currentState.d3Links.map(l => ({
-        source: getId(l.source),
-        target: getId(l.target),
-    }));
-    const graphElementsUpdated = !(isDeepEqual(nextNodes, stateD3Nodes) && isDeepEqual(nextLinks, stateD3Links));
-    const newGraphElements =
-        nextNodes.length !== stateD3Nodes.length ||
-        nextLinks.length !== stateD3Links.length ||
-        !isDeepEqual(nextNodes.map(_pickId), stateD3Nodes.map(_pickId)) ||
-        !isDeepEqual(nextLinks.map(_pickSourceAndTarget), stateD3Links.map(_pickSourceAndTarget));
-
-    return { graphElementsUpdated, newGraphElements };
-}
-
-/**
- * Logic to check for changes in graph config.
- * @param {Object} nextProps - nextProps that graph will receive.
- * @param {Object} currentState - the current state of the graph.
- * @returns {Object.<string, boolean>} returns object containing update check flags:
- * - configUpdated - global flag that indicates if any property was updated.
- * - d3ConfigUpdated - specific flag that indicates changes in d3 configurations.
- * @memberof Graph/helper
- */
-function checkForGraphConfigChanges(nextProps, currentState) {
-    const newConfig = nextProps.config || {};
-    const configUpdated = newConfig && !isEmptyObject(newConfig) && !isDeepEqual(newConfig, currentState.config);
-    const d3ConfigUpdated = newConfig && newConfig.d3 && !isDeepEqual(newConfig.d3, currentState.config.d3);
-
-    return { configUpdated, d3ConfigUpdated };
-}
-
-/**
  * Returns the transformation to apply in order to center the graph on the
  * selected node.
  * @param {Object} d3Node - node to focus the graph view on.
@@ -410,7 +334,7 @@ function initializeGraphState({ data, id, config }, state) {
         groups = _colorGroups(graph.groups);
     const { nodes: d3Nodes, links: d3Links } = graph;
     const formatedId = id.replace(/ /g, "_");
-    const simulation = _createForceSimulation(newConfig.width, newConfig.height, newConfig.d3 && newConfig.d3.gravity);
+    const simulation = createForceSimulation(newConfig.width, newConfig.height, newConfig.d3 && newConfig.d3.gravity);
     const { minZoom, maxZoom, focusZoom } = newConfig;
 
     if (focusZoom > maxZoom) {
@@ -488,10 +412,4 @@ function updateNodeHighlightedValue(
     };
 }
 
-export {
-    checkForGraphConfigChanges,
-    checkForGraphElementsChanges,
-    getCenterAndZoomTransformation,
-    initializeGraphState,
-    updateNodeHighlightedValue,
-};
+export { getCenterAndZoomTransformation, initializeGraphState, updateNodeHighlightedValue };

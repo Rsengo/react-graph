@@ -1,7 +1,6 @@
 import React from "react";
 
 import { drag as d3Drag } from "d3-drag";
-import { forceLink as d3ForceLink } from "d3-force";
 import { select as d3Select, selectAll as d3SelectAll, event as d3Event } from "d3-selection";
 import { zoom as d3Zoom } from "d3-zoom";
 
@@ -10,15 +9,11 @@ import DEFAULT_CONFIG from "./graph.config";
 import ERRORS from "../../err";
 
 import { getTargetLeafConnections, toggleLinksMatrixConnections, toggleLinksConnections } from "./collapse.helper";
-import {
-    updateNodeHighlightedValue,
-    checkForGraphConfigChanges,
-    checkForGraphElementsChanges,
-    getCenterAndZoomTransformation,
-    initializeGraphState,
-} from "./graph.helper";
+import { updateNodeHighlightedValue, getCenterAndZoomTransformation, initializeGraphState } from "./graph.helper";
 import { renderGraph } from "./graph.renderer";
 import { merge, throwErr } from "../../utils";
+import { graphLinkForceConfig } from "../../helpers/simulationHelper";
+import { checkForGraphConfigChanges, checkForGraphElementsChanges } from "./changes.helper";
 
 /**
  * Graph component is the main component for react-d3-graph components, its interface allows its user
@@ -148,20 +143,6 @@ export default class Graph extends React.Component {
     };
 
     /**
-     * This method runs {@link d3-force|https://github.com/d3/d3-force}
-     * against the current graph.
-     * @returns {undefined}
-     */
-    _graphLinkForceConfig() {
-        const forceLink = d3ForceLink(this.state.d3Links)
-            .id(l => l.id)
-            .distance(this.state.config.d3.linkLength)
-            .strength(this.state.config.d3.linkStrength);
-
-        this.state.simulation.force(CONST.LINK_CLASS_NAME, forceLink);
-    }
-
-    /**
      * This method runs {@link d3-drag|https://github.com/d3/d3-drag}
      * against the current graph.
      * @returns {undefined}
@@ -185,7 +166,7 @@ export default class Graph extends React.Component {
     _graphBindD3ToReactComponent() {
         if (!this.state.config.d3.disableLinkForce) {
             this.state.simulation.nodes(this.state.d3Nodes).on("tick", this._tick);
-            this._graphLinkForceConfig();
+            graphLinkForceConfig(this.state.simulation, this.state.d3Links, this.state.config);
         }
         this._graphNodeDragConfig();
     }
@@ -512,9 +493,6 @@ export default class Graph extends React.Component {
         this.nodeClickTimer = null;
         this.isDraggingNode = false;
         this.state = initializeGraphState(this.props, this.state);
-
-        window.ssp = () => this.setState({ ...this.state, groupsCollapsed: true });
-        window.ssn = () => this.setState({ ...this.state, groupsCollapsed: false });
     }
 
     /**
@@ -581,6 +559,8 @@ export default class Graph extends React.Component {
             this._zoomConfig();
             this.setState({ configUpdated: false });
         }
+
+        // this._graphNodeDragConfig();
     }
 
     componentDidMount() {
