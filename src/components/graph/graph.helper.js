@@ -228,9 +228,6 @@ function _validateGraphData(data) {
     }
 }
 
-// list of properties that are of no interest when it comes to nodes and links comparison
-const NODE_PROPERTIES_DISCARD_TO_COMPARE = ["x", "y", "vx", "vy", "index"];
-
 /**
  * Picks the id.
  * @param {Object} o object to pick from.

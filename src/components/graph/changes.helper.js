@@ -1,5 +1,8 @@
 import { isDeepEqual, isEmptyObject, merge, pick, antiPick, throwErr, logWarning } from "../../utils";
 
+// list of properties that are of no interest when it comes to nodes and links comparison
+const NODE_PROPERTIES_DISCARD_TO_COMPARE = ["x", "y", "vx", "vy", "index"];
+
 /**
  * Logic to check for changes in graph config.
  * @param {Object} nextProps - nextProps that graph will receive.
