@@ -56,6 +56,10 @@ module.exports = {
             source: "lead_2",
             target: "common_emp_1",
         },
+        {
+            source: "group_for_two_1",
+            target: "group_for_two_2",
+        },
     ],
     nodes: [
         {
@@ -113,6 +117,18 @@ module.exports = {
             id: "common_emp_1",
             groups: ["group_1", "group_2"],
         },
+        {
+            id: "group_owner",
+            groups: ["group_own"],
+        },
+        {
+            id: "group_for_two_1",
+            groups: ["group_for_two"],
+        },
+        {
+            id: "group_for_two_2",
+            groups: ["group_for_two"],
+        },
     ],
     groups: [
         {
@@ -120,6 +136,12 @@ module.exports = {
         },
         {
             id: "group_2",
+        },
+        {
+            id: "group_own",
+        },
+        {
+            id: "group_for_two",
         },
     ],
 };
