@@ -4,6 +4,7 @@ import {
     forceSimulation as d3ForceSimulation,
     forceManyBody as d3ForceManyBody,
     forceLink as d3ForceLink,
+    forceCenter as d3ForceCenter,
 } from "d3-force";
 
 import CONST from "../components/graph/graph.const";
@@ -39,7 +40,9 @@ const createForceSimulation = (width, height, gravity) => {
     const forceStrength = gravity;
 
     //TODO
-    return d3ForceSimulation().force("charge", d3ForceManyBody().strength(forceStrength));
+    return d3ForceSimulation()
+        .force("charge", d3ForceManyBody().strength(forceStrength))
+        .force("center", d3ForceCenter(width / 2, height / 2));
     // .force("x", frx)
     // .force("y", fry);
 };
