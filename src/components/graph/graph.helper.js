@@ -336,7 +336,7 @@ function initializeGraphState({ data, id, config }, state) {
         transform: 1,
         draggedNode: null,
         groups,
-        groupsCollapsed: false,
+        groupsCollapsed: state?.groupsCollapsed || false,
         collapsedNodes,
         collapsedLinks,
     };
