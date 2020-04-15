@@ -232,6 +232,7 @@ export default {
     directed: false,
     focusAnimationDuration: 0.75,
     focusZoom: 1,
+    initialZoom: 1,
     height: 400,
     highlightDegree: 1,
     highlightOpacity: 1,
