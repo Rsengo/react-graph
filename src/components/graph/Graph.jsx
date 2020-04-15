@@ -244,7 +244,7 @@ export default class Graph extends React.Component {
                 this.state.collapsedNodes,
                 this.state.links,
                 this.state.collapsedLinks,
-                this.state.groupsCollapsed,
+                this.props.groupsCollapsed,
                 this.state.config,
                 id,
                 value
@@ -285,20 +285,11 @@ export default class Graph extends React.Component {
 
         this.state.config.panAndZoom && this.setState({ transform: transform.k });
 
-        if (transform.k > this.state.config.group.collapseZoom && this.state.config.group.collapsible) {
-            this.setState({ groupsCollapsed: false }, () => {
-                console.log("expand");
-                console.log(this.state);
-            });
-        } else {
-            this.setState({ groupsCollapsed: true }, () => {
-                console.log("collapse");
-                console.log(this.state);
-            });
-        }
+        const groupsCollapsed =
+            transform.k <= this.state.config.group.collapseZoom && this.state.config.group.collapsible;
 
         if (this.props.onZoom) {
-            this.props.onZoom(transform.k);
+            this.props.onZoom(transform.k, groupsCollapsed);
         }
     };
 
@@ -574,6 +565,10 @@ export default class Graph extends React.Component {
             .scaleExtent([this.state.config.minZoom, this.state.config.maxZoom])
             .on("zoom", this._zoomed);
 
+        if (this.state.config.initialZoom) {
+            this.zoomTo(this.state.config.initialZoom);
+        }
+
         if (!this.state.config.staticGraph) {
             this._graphBindD3ToReactComponent();
         }
@@ -619,7 +614,7 @@ export default class Graph extends React.Component {
             this.state.highlightedNode,
             this.state.highlightedLink,
             this.state.transform,
-            this.state.groupsCollapsed
+            this.props.groupsCollapsed
         );
 
         const svgStyle = {
@@ -634,7 +629,7 @@ export default class Graph extends React.Component {
                 <svg name={`svg-container-${this.state.id}`} style={svgStyle} onClick={this.onClickGraph}>
                     {defs}
                     <g id={`${this.state.id}-${CONST.GRAPH_CONTAINER_ID}`} {...containerProps}>
-                        {this.state.groupsCollapsed ? null : groups}
+                        {this.props.groupsCollapsed ? null : groups}
                         {links}
                         {nodes}
                     </g>
