@@ -270,11 +270,7 @@ export default class Graph extends React.Component {
      */
     _zoomConfig = () => {
         d3Select(`#${this.state.id}-${CONST.GRAPH_WRAPPER_ID}`)
-            .call(
-                d3Zoom()
-                    .scaleExtent([this.state.config.minZoom, this.state.config.maxZoom])
-                    .on("zoom", this._zoomed)
-            )
+            .call(this._zoom)
             .on("dblclick.zoom", null);
     };
 
@@ -290,14 +286,24 @@ export default class Graph extends React.Component {
         this.state.config.panAndZoom && this.setState({ transform: transform.k });
 
         if (transform.k > this.state.config.group.collapseZoom && this.state.config.group.collapsible) {
-            this.setState({ ...this.state, groupsCollapsed: false });
+            this.setState({ groupsCollapsed: false }, () => {
+                console.log("expand");
+                console.log(this.state);
+            });
         } else {
-            this.setState({ ...this.state, groupsCollapsed: true });
+            this.setState({ groupsCollapsed: true }, () => {
+                console.log("collapse");
+                console.log(this.state);
+            });
         }
 
         if (this.props.onZoom) {
             this.props.onZoom(transform.k);
         }
+    };
+
+    zoomTo = scale => {
+        d3SelectAll(`#${this.state.id}-${CONST.GRAPH_WRAPPER_ID}`).call(this._zoom.scaleTo, scale);
     };
 
     /**
@@ -564,6 +570,10 @@ export default class Graph extends React.Component {
     }
 
     componentDidMount() {
+        this._zoom = d3Zoom()
+            .scaleExtent([this.state.config.minZoom, this.state.config.maxZoom])
+            .on("zoom", this._zoomed);
+
         if (!this.state.config.staticGraph) {
             this._graphBindD3ToReactComponent();
         }
