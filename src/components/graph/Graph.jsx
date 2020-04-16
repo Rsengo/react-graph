@@ -285,11 +285,8 @@ export default class Graph extends React.Component {
 
         this.state.config.panAndZoom && this.setState({ transform: transform.k });
 
-        const groupsCollapsed =
-            transform.k <= this.state.config.group.collapseZoom && this.state.config.group.collapsible;
-
         if (this.props.onZoom) {
-            this.props.onZoom(transform.k, groupsCollapsed);
+            this.props.onZoom(transform.k);
         }
     };
 
@@ -519,6 +516,10 @@ export default class Graph extends React.Component {
         const focusTransformation = getCenterAndZoomTransformation(d3FocusedNode, this.state.config);
         const enableFocusAnimation = this.props.data.focusedNodeId !== nextProps.data.focusedNodeId;
 
+        if (this.props.zoom !== nextProps.zoom) {
+            this.zoomTo(nextProps.zoom);
+        }
+
         this.setState({
             ...state,
             config,
@@ -565,9 +566,7 @@ export default class Graph extends React.Component {
             .scaleExtent([this.state.config.minZoom, this.state.config.maxZoom])
             .on("zoom", this._zoomed);
 
-        if (this.state.config.initialZoom) {
-            this.zoomTo(this.state.config.initialZoom);
-        }
+        this.zoomTo(this.props.zoom);
 
         if (!this.state.config.staticGraph) {
             this._graphBindD3ToReactComponent();
