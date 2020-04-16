@@ -10,12 +10,13 @@ const getCollapsedData = (nodes, links, groups) => {
 
     const groupNodes = getGroupNodes(nodesWithGroups);
 
-    const collapsedNodes = Object.values(groups).map(({ id, fillColor }) => {
+    const collapsedNodes = Object.values(groups).map(({ id, name, fillColor }) => {
         const currentGroupNodes = groupNodes[id];
         const { centroid } = createGroupPolygon(currentGroupNodes);
 
         return {
             id,
+            name: name,
             color: fillColor,
             x: centroid[0],
             y: centroid[1],
